@@ -4,6 +4,7 @@ import { Octokit } from '@octokit/core';
 
 export default {
 	async email(message, env, ctx) {
+		if (message.to !== env.RECIPIENT) return message.setReject('Unknown recipient');
 		const email = await new PostalMime().parse(message.raw);
 		const papers = parse(email.html ?? '')
 			.querySelectorAll('h3 > a[href*="scholar_url?url="]')
@@ -18,6 +19,7 @@ export default {
 					snippet: (snippet?.classList.contains('gse_alrt_sni') ? snippet.text : '').replace(/\s+/g, ' ').trim(),
 				};
 			});
+		if (!papers.length) console.warn(`No papers in "${email.subject}"`, email.text);	
 		const octokit = new Octokit({ auth: env.GITHUB_TOKEN });
 		for (const paper of papers) {
 			await octokit
