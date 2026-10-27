@@ -3,7 +3,7 @@ import { parse } from 'node-html-parser';
 import { Octokit } from '@octokit/core';
 
 export default {
-	async email(message, env, ctx) {
+	async email(message, env: Env & { GITHUB_TOKEN?: string }, ctx) {
 		if (message.to !== env.RECIPIENT) return message.setReject('Unknown recipient');
 		const email = await new PostalMime().parse(message.raw);
 		const papers = parse(email.html ?? '')
@@ -20,14 +20,21 @@ export default {
 				};
 			});
 		if (!papers.length) console.warn(`No papers in "${email.subject}"`, email.text);
-		const octokit = new Octokit({ auth: env.GITHUB_TOKEN });
 		for (const paper of papers) {
+			const issue = {
+				title: `[new candidate] ${paper.title}`,
+				body: `${paper.url}\n\n${paper.authors}\n\n> ${paper.snippet}\n\n_Google Scholar alert: ${email.subject}_`,
+				labels: ['google-scholar'],
+			};
+			if (!env.GITHUB_TOKEN) {
+				console.info(`GITHUB_TOKEN not set, would have created issue in ${env.GITHUB_REPO}`, issue);
+				continue;
+			}
+			const octokit = new Octokit({ auth: env.GITHUB_TOKEN });
 			await octokit
 				.request(`POST /repos/${env.GITHUB_REPO}/issues`, {
 					headers: { 'X-GitHub-Api-Version': '2026-03-10' },
-					title: `[new candidate] ${paper.title}`,
-					body: `${paper.url}\n\n${paper.authors}\n\n> ${paper.snippet}\n\n_Google Scholar alert: ${email.subject}_`,
-					labels: ['google-scholar'],
+					...issue,
 				})
 				.catch((e) => console.error(`GitHub ${e.status} for "${paper.title}": ${e.message}`));
 		}

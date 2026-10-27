@@ -16,6 +16,6 @@
 		"GITHUB_REPO": "lichess-org/papers"
 	},
 	"secrets": {
-		"required": ["GITHUB_TOKEN", "RECIPIENT"]
+		"required": ["RECIPIENT"]
 	}
 }
