@@ -22,7 +22,8 @@ export default {
 		for (const paper of papers) {
 			await octokit
 				.request(`POST /repos/${env.GITHUB_REPO}/issues`, {
-					title: paper.title,
+					headers: { 'X-GitHub-Api-Version': '2026-03-10' },
+					title: `[new candidate] ${paper.title}`,
 					body: `${paper.url}\n\n${paper.authors}\n\n> ${paper.snippet}\n\n_Google Scholar alert: ${email.subject}_`,
 					labels: ['google-scholar'],
 				})
