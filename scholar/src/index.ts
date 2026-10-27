@@ -19,7 +19,7 @@ export default {
 					snippet: (snippet?.classList.contains('gse_alrt_sni') ? snippet.text : '').replace(/\s+/g, ' ').trim(),
 				};
 			});
-		if (!papers.length) console.warn(`No papers in "${email.subject}"`, email.text);	
+		if (!papers.length) console.warn(`No papers in "${email.subject}"`, email.text);
 		const octokit = new Octokit({ auth: env.GITHUB_TOKEN });
 		for (const paper of papers) {
 			await octokit
