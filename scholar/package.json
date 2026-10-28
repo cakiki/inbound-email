@@ -1,0 +1,21 @@
+{
+	"name": "scholar",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@octokit/core": "^7.0.8",
+		"node-html-parser": "^9.0.5",
+		"postal-mime": "^2.7.6"
+	},
+	"devDependencies": {
+		"@types/node": "^25.9.7",
+		"typescript": "^5.9.3",
+		"wrangler": "^4.133.0"
+	}
+}

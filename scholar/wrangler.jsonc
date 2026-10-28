@@ -1,0 +1,21 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "scholar",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-04-26",
+	"observability": {
+		"enabled": true,
+		"logs": {
+			"enabled": true
+		}
+	},
+	"workers_dev": false,
+	"preview_urls": false,
+	"upload_source_maps": true,
+	"vars": {
+		"GITHUB_REPO": "lichess-org/papers"
+	},
+	"secrets": {
+		"required": ["RECIPIENT"]
+	}
+}
