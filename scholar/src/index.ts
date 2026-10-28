@@ -19,7 +19,7 @@ export default {
 					snippet: (snippet?.classList.contains('gse_alrt_sni') ? snippet.text : '').replace(/\s+/g, ' ').trim(),
 				};
 			});
-		if (!papers.length) console.warn(`No papers in "${email.subject}"`, email.text);
+		if (!papers.length) console.warn(`No papers in "${email.subject}"`, parse(email.html ?? '').querySelectorAll('a').map((a) => a.getAttribute('href')), email.text);
 		for (const paper of papers) {
 			const issue = {
 				title: `[new candidate] ${paper.title}`,
